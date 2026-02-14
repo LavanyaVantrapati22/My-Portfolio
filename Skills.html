@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lakshmi Lavanya | Skills</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS VARIABLES (Matching Home Page) --- */
+        :root {
+            --bg-color: #020c1b;
+            --bg-light: #0a192f;
+            --primary-color: #64ffda; /* Teal */
+            --secondary-color: #4c6ef5;
+            --text-color: #ccd6f6;
+            --text-muted: #8892b0;
+            --card-bg: rgba(10, 25, 47, 0.6);
+            --font-main: 'Poppins', sans-serif;
+            --glow: 0 0 20px rgba(100, 255, 218, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- BACKGROUND LAYERS --- */
+        
+        /* Layer 0: Digital Rain Animation (New - Skills Concept) */
+        #code-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; /* Behind content, above solid color */
+            opacity: 0.15; /* Subtle effect */
+            pointer-events: none;
+        }
+
+        /* Layer 1: Moving Grid */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+            background-image: 
+                linear-gradient(rgba(100, 255, 218, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(100, 255, 218, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px) scale(2);
+            opacity: 0.3;
+            animation: moveGrid 10s linear infinite;
+            pointer-events: none;
+        }
+
+        /* Layer 2: Pulsing Aurora Orbs */
+        .aurora-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -4;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .aurora-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: pulseOrb 10s infinite ease-in-out alternate;
+        }
+
+        .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, #4c6ef5, transparent); top: -200px; left: -100px; }
+        .orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, #64ffda, transparent); bottom: -100px; right: -100px; animation-delay: -5s; }
+        .orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, #2563eb, transparent); top: 40%; left: 40%; animation-delay: -2s; }
+
+        /* --- HEADER --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 5%;
+            background: rgba(2, 12, 27, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+        }
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 🔥 THIS moves menu to right */
+    width: 100%;
+}
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover, 
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: var(--primary-color);
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* --- MAIN CONTENT --- */
+        main {
+            padding-top: 100px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 10; /* Ensure content sits above rain */
+        }
+
+        .about-content {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        .about-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .about-content span {
+            color: var(--primary-color);
+            text-shadow: 0 0 15px rgba(100, 255, 218, 0.4);
+        }
+
+        .about-content p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        /* --- SKILLS GRID --- */
+        .highlights {
+            padding: 0 10%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .highlight-card {
+            background: rgba(17, 65, 131, 0.4);
+            backdrop-filter: blur(12px); /* Increased blur for readability against rain */
+            padding: 2.5rem 2rem;
+            border-radius: 8px; 
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.4s ease;
+            opacity: 0; /* Hidden initially */
+            transform: translateY(30px);
+            
+            /* Gentle Float Animation */
+            animation: floatCard 6s ease-in-out infinite;
+        }
+
+        /* Staggered delays for float animation */
+        .highlight-card:nth-child(1) { animation-delay: 0s; }
+        .highlight-card:nth-child(2) { animation-delay: 1.5s; }
+        .highlight-card:nth-child(3) { animation-delay: 3s; }
+        .highlight-card:nth-child(4) { animation-delay: 4.5s; }
+
+        .highlight-card.visible {
+            opacity: 1;
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-15px) scale(1.03) !important; /* Override float on hover */
+            border-color: var(--primary-color);
+            box-shadow: 0 20px 40px -10px rgba(100, 255, 218, 0.2);
+            background: rgba(10, 25, 47, 0.9);
+        }
+
+        .highlight-card i {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .highlight-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .highlight-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        /* --- SPECIFIC ICON HOVER ANIMATIONS --- */
+
+        /* HTML5: Spin Effect */
+        #card-html:hover i {
+            animation: spin360 0.8s ease-in-out;
+        }
+        @keyframes spin360 {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); color: #e34c26; text-shadow: 0 0 15px #e34c26; } /* Official HTML Color */
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        /* CSS3: Wiggle/Skew */
+        #card-css:hover i {
+            animation: wiggle 0.6s ease;
+            color: #264de4; /* Official CSS Color */
+            text-shadow: 0 0 15px #264de4;
+        }
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-15deg); }
+            75% { transform: rotate(15deg); }
+        }
+
+        /* JavaScript: Bounce */
+        #card-js:hover i {
+            animation: bounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: #f0db4f; /* Official JS Color */
+            text-shadow: 0 0 15px #f0db4f;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Soft Skills: Pulse */
+        #card-soft:hover i {
+            animation: pulseScale 0.8s ease infinite;
+        }
+        @keyframes pulseScale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); box-shadow: 0 0 20px var(--primary-color); }
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #020c1b;
+            padding: 3rem 5%;
+            text-align: center;
+            margin-top: auto;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 45px;
+            height: 45px;
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 50%;
+            margin: 0 10px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+
+        .social-links a:hover {
+            background: rgba(100, 255, 218, 0.1);
+            transform: translateY(-3px);
+            box-shadow: var(--glow);
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 1.5rem;
+        }
+
+        /* --- KEYFRAMES --- */
+        @keyframes moveGrid {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 50px; }
+        }
+
+        @keyframes pulseOrb {
+            0% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.1) translate(20px, -20px); }
+            100% { transform: scale(1) translate(0, 0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .about-content h1 { font-size: 2.2rem; }
+            .highlights { padding: 0 5%; }
+        }
+         .photo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Logo image */
+.logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;   /* round logo */
+    object-fit: cover;
+    cursor: pointer;
+}
+    </style>
+</head>
+<body>
+
+    <!-- Layer 0: Code Rain Canvas (Skills Concept) -->
+    <canvas id="code-rain"></canvas>
+
+    <!-- Layer 1: Moving Grid -->
+    <div class="grid-bg"></div>
+
+    <!-- Layer 2: Pulsing Aurora Orbs -->
+    <div class="aurora-container">
+        <div class="aurora-orb orb-1"></div>
+        <div class="aurora-orb orb-2"></div>
+        <div class="aurora-orb orb-3"></div>
+    </div>
+
+    <header>
+       <nav class="navbar">
+        <div class="photo">
+            <a href="Home.html">
+                <img src="Lavanya_V.jpg" alt="Logo" class="logo">
+            </a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="skills.html" class="active">Skills</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </header>
+
+    <main>
+        <section class="about-section">
+            <div class="about-content">
+                <h1>My <span>Skills</span></h1>
+                <p>
+                    Mastering the languages of the web. 
+                    Here are the technical and professional skills I have developed
+                    during my academic journey and personal projects.
+                </p>
+            </div>
+
+            <div class="highlights">
+                <!-- HTML5 Card -->
+                <div class="highlight-card" id="card-html">
+                    <i class="fab fa-html5"></i>
+                    <h3>HTML5</h3>
+                    <p>Semantic markup and well-structured web pages</p>
+                </div>
+                
+                <!-- CSS Card -->
+                <div class="highlight-card" id="card-css">
+                    <i class="fab fa-css3-alt"></i>
+                    <h3>CSS</h3>
+                    <p>Responsive layouts, Flexbox, and modern UI design</p>
+                </div>
+                
+                <!-- JS Card -->
+                <div class="highlight-card" id="card-js">
+                    <i class="fab fa-js"></i>
+                    <h3>JavaScript</h3>
+                    <p>Basic scripting, DOM manipulation, and interactivity</p>
+                </div>
+                
+                <!-- Soft Skills Card -->
+                <div class="highlight-card" id="card-soft">
+                    <i class="fas fa-users"></i>
+                    <h3>Soft Skills</h3>
+                    <p>Communication, teamwork, and problem-solving</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="mailto:example@gmail.com"><i class="fas fa-envelope"></i></a>
+            </div>
+            <p>&copy; 2025 Lakshmi Lavanya. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- 1. Code Rain Animation (Skills Concept) ---
+        const canvas = document.getElementById('code-rain');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas to full screen
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Characters to use in the rain (0, 1, and coding symbols)
+        const codeSymbols = "010101<>{};HTMLCSSJS";
+        const symbolArray = codeSymbols.split("");
+
+        const fontSize = 14;
+        const columns = canvas.width / fontSize; // Number of columns
+
+        // Array of drops - one per column
+        const drops = [];
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        function drawCode() {
+            // Create a trail effect by filling with transparent black instead of clearing
+            // Match the background color #020c1b with high transparency
+            ctx.fillStyle = "rgba(2, 12, 27, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Set text color to the Theme Teal (#64ffda)
+            ctx.fillStyle = "#64ffda";
+            ctx.font = fontSize + "px monospace";
+
+            for (let i = 0; i < drops.length; i++) {
+                // Pick a random character
+                const text = symbolArray[Math.floor(Math.random() * symbolArray.length)];
+                
+                // Draw the character
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                // Reset drop to top randomly after it crosses screen
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                // Move drop down
+                drops[i]++;
+            }
+        }
+
+        // Run animation loop
+        setInterval(drawCode, 35);
+
+        // Handle Resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            // Recalculate columns
+            const newColumns = canvas.width / fontSize;
+            // Note: Simplified resize logic; ideally re-initialize drops array
+        });
+
+        // --- 2. Scroll Reveal Animation ---
+        const cards = document.querySelectorAll('.highlight-card');
+
+        function checkScroll() {
+            const triggerBottom = window.innerHeight / 1.2;
+
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+
+                if(cardTop < triggerBottom) {
+                    card.classList.add('visible');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', checkScroll);
+        checkScroll();
+    </script>
+</body>
+</html>
