@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lakshmi Lavanya | Projects</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS VARIABLES (Strictly Navy & Teal) --- */
+        :root {
+            --bg-color: #020c1b;
+            --bg-light: #0a192f;
+            --primary-color: #64ffda; /* Teal */
+            --secondary-color: #4c6ef5; /* Indigo */
+            --text-color: #ccd6f6;
+            --text-muted: #8892b0;
+            --card-bg: rgba(10, 25, 47, 0.7);
+            --font-main: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- BACKGROUND LAYERS --- */
+        
+        /* Layer 0: Project Network Animation (New) */
+        #network-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Behind grid but content still needs to pop */
+            pointer-events: none; /* Let clicks pass through */
+        }
+
+        /* Layer 1: Moving Grid */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background-image: 
+                linear-gradient(rgba(100, 255, 218, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(100, 255, 218, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px) scale(2);
+            opacity: 0.5;
+            animation: moveGrid 10s linear infinite;
+            pointer-events: none;
+        }
+
+        /* Layer 2: Pulsing Aurora Orbs */
+        .aurora-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3; /* Deepest layer */
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .aurora-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3; /* Slightly dimmer to let network show */
+            animation: pulseOrb 10s infinite ease-in-out alternate;
+        }
+
+        .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, #4c6ef5, transparent); top: -200px; left: -100px; }
+        .orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, #64ffda, transparent); bottom: -100px; right: -100px; animation-delay: -5s; }
+        .orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, #2563eb, transparent); top: 40%; left: 40%; animation-delay: -2s; }
+
+        /* --- HEADER --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 5%;
+            background: rgba(2, 12, 27, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+        }
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 🔥 THIS moves menu to right */
+    width: 100%;
+}
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(100,255,218,0.2);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover, 
+        .nav-links a.active {
+            color: var(--primary-color);
+            text-shadow: 0 0 8px rgba(100,255,218,0.4);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: var(--primary-color);
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* --- MAIN CONTENT --- */
+        main {
+            padding-top: 120px;
+            padding-bottom: 4rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 10; /* Ensure content sits above canvas */
+        }
+
+        .about-content {
+            text-align: center;
+            margin-bottom: 5rem;
+            padding: 0 1rem;
+            animation: fadeInDown 1s ease forwards;
+        }
+
+        .about-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            letter-spacing: -1px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color), var(--primary-color));
+            background-size: 200% auto;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientFlow 4s linear infinite;
+            font-weight: 700;
+        }
+
+        .about-content p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        /* --- PROJECTS GRID (Advanced Animation) --- */
+        .highlights {
+            padding: 0 10%;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .highlight-card {
+            background: rgba(17, 65, 131, 0.4); /* Slightly more transparent for network visibility */
+            backdrop-filter: blur(12px);
+            padding: 3rem 2rem;
+            border-radius: 12px; 
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.1s ease; 
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Spotlight Overlay Layers */
+        .highlight-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 12px;
+            padding: 1px; 
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(100, 255, 218, 0.05), transparent 40%);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: 3;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .highlight-card:hover::before {
+            opacity: 1;
+        }
+
+        .highlight-card::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(100, 255, 218, 0.08), transparent 40%);
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .highlight-card:hover::after {
+            opacity: 1;
+        }
+
+        .card-content {
+            z-index: 4; 
+            transform: translateZ(20px); 
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .highlight-card i {
+            font-size: 4.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 0 8px rgba(100, 255, 218, 0.3));
+        }
+
+        .highlight-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+            color: var(--text-color);
+        }
+
+        .highlight-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- BUTTON ANIMATION --- */
+        .btn.primary {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 2.5rem;
+            border-radius: 4px; 
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn.primary::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 0%;
+            height: 100%;
+            background: var(--primary-color);
+            z-index: -1;
+            transition: width 0.3s ease;
+        }
+
+        .btn.primary:hover::before {
+            width: 100%;
+        }
+
+        .btn.primary:hover {
+            color: var(--bg-color);
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.4);
+        }
+
+        /* --- SPECIFIC ICON HOVER ANIMATIONS --- */
+
+        /* Laptop: Holographic Glitch */
+        #card-portfolio:hover i {
+            animation: holoGlitch 0.6s infinite;
+            color: #fff;
+            text-shadow: 2px 0 #64ffda, -2px 0 #4c6ef5;
+        }
+        @keyframes holoGlitch {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(-10deg); }
+            40% { transform: skew(10deg); }
+            60% { transform: skew(-5deg); }
+            80% { transform: skew(5deg); }
+            100% { transform: skew(0deg); }
+        }
+
+        /* Github: Orbit Spin */
+        #card-finder:hover i {
+            animation: spinOrbit 1.5s infinite linear;
+        }
+        @keyframes spinOrbit {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #020c1b;
+            padding: 3rem 5%;
+            text-align: center;
+            margin-top: auto;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 45px;
+            height: 45px;
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 50%;
+            margin: 0 10px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+
+        .social-links a:hover {
+            background: rgba(100, 255, 218, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 1.5rem;
+        }
+
+        /* --- KEYFRAMES --- */
+        @keyframes moveGrid {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 50px; }
+        }
+
+        @keyframes pulseOrb {
+            0% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.1) translate(20px, -20px); }
+            100% { transform: scale(1) translate(0, 0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .about-content h1 { font-size: 2.5rem; }
+            .highlights { padding: 0 5%; grid-template-columns: 1fr; }
+        }
+        .photo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Logo image */
+.logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;   /* round logo */
+    object-fit: cover;
+    cursor: pointer;
+}
+    </style>
+</head>
+<body>
+
+    <!-- Layer 0: Network Canvas (Projects Concept Animation) -->
+    <canvas id="network-canvas"></canvas>
+
+    <!-- Layer 1: Moving Grid -->
+    <div class="grid-bg"></div>
+
+    <!-- Layer 2: Pulsing Aurora Orbs -->
+    <div class="aurora-container">
+        <div class="aurora-orb orb-1"></div>
+        <div class="aurora-orb orb-2"></div>
+        <div class="aurora-orb orb-3"></div>
+    </div>
+
+    <header>
+       <nav class="navbar">
+        <div class="photo">
+            <a href="Home.html">
+                <img src="Lavanya_V.jpg" alt="Logo" class="logo">
+            </a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="Home.html">Home</a></li>
+            <li><a href="About.html">About</a></li>
+            <li><a href="Skills.html">Skills</a></li>
+            <li><a href="Projects.html" class="active">Projects</a></li>
+            <li><a href="Contact.html">Contact</a></li>
+        </ul>
+    </header>
+
+    <main>
+        <section class="about-section">
+            <div class="about-content">
+                <h1>My <span class="gradient-text">Projects</span></h1>
+                <p>
+                    Connecting ideas and code to build interactive digital experiences.
+                    Hover over the cards to see details.
+                </p>
+            </div>
+
+            <div class="highlights">
+                <!-- Project 1 -->
+                <div class="highlight-card" id="card-portfolio">
+                    <div class="card-content">
+                        <i class="fas fa-laptop-code"></i>
+                        <h3>Portfolio Website</h3>
+                        <p>
+                            A fully responsive personal portfolio featuring modern UI, 
+                            glassmorphism effects, and fluid animations.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="highlight-card" id="card-finder">
+                    <div class="card-content">
+                        <i class="fab fa-github"></i>
+                        <h3>History Finder</h3>
+                        <p>
+                            A dynamic web application for browsing historical data. 
+                            Hosted on GitHub Pages.
+                        </p>
+                        <a href="https://lavanyavantrapati22.github.io/Project/" target="_blank" class="btn primary">
+                            View Live Project <i class="fas fa-external-link-alt" style="font-size:0.8em; margin-left:8px;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="mailto:example@gmail.com"><i class="fas fa-envelope"></i></a>
+            </div>
+            <p>&copy; 2025 Lakshmi Lavanya. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- 1. Network Background Animation (Projects Concept) ---
+        const canvas = document.getElementById('network-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let particles = [];
+        
+        // Configuration
+        const particleCount = 70; // Number of nodes
+        const connectionDistance = 150; // Distance to draw lines
+        const mouseDistance = 200; // Interaction radius
+        
+        // Mouse tracking
+        let mouse = { x: null, y: null };
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+        
+        // Resize handling
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initParticles();
+        }
+        
+        window.addEventListener('resize', resize);
+
+        // Particle Class
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 1.5; // Velocity X
+                this.vy = (Math.random() - 0.5) * 1.5; // Velocity Y
+                this.size = Math.random() * 2 + 1; // Size
+                // Using Teal color
+                this.color = '#64ffda'; 
+            }
+            
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // Bounce off edges
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+                
+                // Mouse Interaction (Repel slightly)
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+                
+                if (distance < mouseDistance) {
+                    const forceDirectionX = dx / distance;
+                    const forceDirectionY = dy / distance;
+                    const force = (mouseDistance - distance) / mouseDistance;
+                    const directionX = forceDirectionX * force * 1; // Strength
+                    const directionY = forceDirectionY * force * 1;
+                    
+                    this.x -= directionX;
+                    this.y -= directionY;
+                }
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+        
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                
+                // Draw connections
+                for (let j = i; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let distance = Math.sqrt(dx*dx + dy*dy);
+                    
+                    if (distance < connectionDistance) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(100, 255, 218, ${1 - distance/connectionDistance})`; // Fade out based on distance
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            // Connect to mouse
+            if(mouse.x != null) {
+                 for (let i = 0; i < particles.length; i++) {
+                    let dx = mouse.x - particles[i].x;
+                    let dy = mouse.y - particles[i].y;
+                    let distance = Math.sqrt(dx*dx + dy*dy);
+                    
+                    if (distance < mouseDistance) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(100, 255, 218, ${1 - distance/mouseDistance})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.moveTo(mouse.x, mouse.y);
+                        ctx.lineTo(particles[i].x, particles[i].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+        
+        // Initialize
+        resize();
+        animate();
+
+
+        // --- 2. Card Tilt & Spotlight Effect ---
+        const cards = document.querySelectorAll('.highlight-card');
+
+        cards.forEach(card => {
+            card.onmousemove = e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                card.style.setProperty("--mouse-x", `${x}px`);
+                card.style.setProperty("--mouse-y", `${y}px`);
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -5; 
+                const rotateY = ((x - centerX) / centerX) * 5;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            };
+
+            card.onmouseleave = () => {
+                card.style.transform = "perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)";
+            };
+        });
+
+        // --- 3. Magnetic Button Effect ---
+        const btn = document.querySelector('.btn.primary');
+        if(btn) {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0px, 0px)';
+            });
+        }
+
+    </script>
+</body>
+</html>
